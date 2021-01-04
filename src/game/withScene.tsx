@@ -14,11 +14,9 @@ const withScene = (Comp: typeof Component | FC | ComponentType<{ scene: Phaser.S
         if (game.scene.getKey(name)) {
           game.scene.stop(name);
           game.scene.remove(name);
-          console.log('removed old scene', name);
         }
 
         let newScene = sceneFactory();
-        console.log('created scene', name, newScene);
         game.scene.add(name, newScene);
 
         setScene(newScene);

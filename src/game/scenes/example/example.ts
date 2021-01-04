@@ -12,7 +12,7 @@ export default class Example extends Phaser.Scene {
   }
 
   create() {
-    console.log('created!');
+    
   }
   update(time: number, delta: number): void {
     super.update(time, delta);
