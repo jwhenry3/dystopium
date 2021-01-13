@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 
-export default class Example extends Phaser.Scene {
+export default class Title extends Phaser.Scene {
 
   constructor() {
     super({
-      key: 'example'
+      key: 'title'
     });
   }
   preload() {
@@ -12,7 +12,7 @@ export default class Example extends Phaser.Scene {
   }
 
   create() {
-    console.log('Example Scene Loaded');
+    console.log('Title Scene Loaded');
   }
   update(time: number, delta: number): void {
     super.update(time, delta);

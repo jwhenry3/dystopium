@@ -1,0 +1,10 @@
+.character-list {
+  .character {
+    border: 1.5px solid #ccc;
+    border-radius: 16px;
+    font-size: 16px;
+    &.selected {
+      border: 1.5px solid indigo;
+    }
+  }
+}

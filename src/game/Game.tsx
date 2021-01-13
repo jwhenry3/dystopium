@@ -36,7 +36,7 @@ function Game({game, setGame}: PhaserState & any) {
   }, [ref, game, setGame]);
   return <div className="game">
     <canvas ref={ref}/>
-    <Scene onScene={setScene} game={game}/>
+    {game ? <Scene onScene={setScene} game={game}/> : ''}
   </div>;
 }
 

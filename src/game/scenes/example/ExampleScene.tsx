@@ -1,11 +1,16 @@
 import {SceneProps}   from "../props";
-import {FC}           from "react";
+import React, {FC}    from "react";
 import Example        from "./example";
 import SceneContainer from "../../SceneContainer";
 
-const ExampleScene: FC<SceneProps> = ({game}: SceneProps) => {
+const ExampleScene: FC<SceneProps> = ({game, onScene}: SceneProps) => {
   return <SceneContainer sceneFactory={() => new Example()} name="example" game={game}>
-    {(scene: Example) => <div>Example Works!</div>}
+    {(scene: Example) => <>
+      <div>Example Works!</div>
+      <div className="ui">
+        <button onClick={() => onScene('title')}>To Title</button>
+      </div>
+    </>}
   </SceneContainer>
 };
 
