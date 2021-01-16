@@ -1,4 +1,3 @@
-import Phaser from "phaser";
 
 export default class Title extends Phaser.Scene {
 

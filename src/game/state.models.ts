@@ -1,15 +1,3 @@
-export interface GameState {
-  scene: string
-  friends: { [id: string]: PlayerId }
-  party?: Party
-  players: { [id: string]: Player }
-  playerLocations: {
-    [x: number]: {
-      [y: number]: { [id: string]: PlayerId }
-    }
-  }
-}
-
 export interface Entity {
   id: string
   name: string
@@ -21,19 +9,17 @@ export interface Party {
   leader: string
 }
 
-export interface Player {
-  id: PlayerId
-  race: 'human'
+export interface PlayerIdentity extends PlayerId {
+  race: 'human' | string
   gender: 'm' | 'f'
-  class: PlayerClass
-  location: PlayerLocation
+  level: number
+  map: string
 }
 
-export interface PlayerLocation {
-  id: PlayerId
-  map: string
-  x: number
-  y: number
+export interface PlayerDetails {
+  identity: PlayerIdentity
+  equipment: PlayerEquipment
+  stats: PlayerStatPoints
 }
 
 export interface PlayerId {
@@ -61,13 +47,15 @@ export interface PlayerStatPoints {
 }
 
 export interface PlayerEquipment {
-  weapons: EquipmentSlot[]
+  weapons: [EquipmentSlot] | [EquipmentSlot, EquipmentSlot]
   head: EquipmentSlot
   neck: EquipmentSlot
   chest: EquipmentSlot
   hands: EquipmentSlot
+  waist: EquipmentSlot
   legs: EquipmentSlot
   feet: EquipmentSlot
   back: EquipmentSlot
-  rings: EquipmentSlot[]
+  leftRing: EquipmentSlot
+  rightRing: EquipmentSlot
 }
