@@ -1,9 +1,9 @@
 import {SceneProps}             from "../props";
 import React, {FC, useCallback} from "react";
-import Example                  from "./example";
-import {useSceneLifecycle}      from "../../stores/scene.store";
-import {useCharacters}          from "../../stores/characters.store";
-import {useServers}             from "../../stores/servers.store";
+import Example             from "./example";
+import {useSceneLifecycle} from "../../stores/game/scene.store";
+import {useCharacters}     from "../../stores/lobby/characters.store";
+import {useServers}             from "../../stores/lobby/servers.store";
 
 const ExampleScene: FC<SceneProps> = ({onScene}: SceneProps) => {
   const {changeServer} = useServers();

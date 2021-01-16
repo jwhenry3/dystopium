@@ -1,5 +1,5 @@
 import create, {State} from "zustand";
-import {Position}      from "./shared/position";
+import {Position}      from "../shared/position";
 
 export declare type NpcAction = 'buy' | 'sell' | 'quest';
 
@@ -35,4 +35,4 @@ const config = {
   quests: {}
 };
 
-export const useNpcData = create<NpcConfig>((): NpcConfig => config);
+export const useNpcs = create<NpcConfig>((): NpcConfig => config);

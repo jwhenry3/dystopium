@@ -3,9 +3,9 @@ import TitleScene           from "./scenes/title/TitleScene";
 import UnknownScene         from "./scenes/unknown/UnknownScene";
 import {SceneProps}         from "./scenes/props";
 import ExampleScene         from "./scenes/example/ExampleScene";
-import {usePhaserLifecycle} from "./stores/phaser.store";
+import {usePhaserLifecycle} from "./stores/game/phaser.store";
 import "./Game.scss";
-import {useSceneData}       from "./stores/scene.store";
+import {useSceneData} from "./stores/game/scene.store";
 
 
 const scenes: { [key: string]: FC<SceneProps> } = {

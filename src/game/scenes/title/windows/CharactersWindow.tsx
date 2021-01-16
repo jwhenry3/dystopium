@@ -1,7 +1,7 @@
 import {useState}                     from "react";
 import {Button}                       from "@material-ui/core";
 import "./CharactersWindow.scss";
-import {CharacterData, useCharacters} from "../../../stores/characters.store";
+import {CharacterData, useCharacters} from "../../../stores/lobby/characters.store";
 
 const CharactersWindow = ({onBack, onCreate}: { onBack: () => void, onCreate: () => void }) => {
   const {characters, changeCharacter} = useCharacters();

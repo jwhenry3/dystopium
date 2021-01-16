@@ -1,5 +1,5 @@
 import {List, MenuItem} from "@material-ui/core";
-import {useServers}     from "../../../stores/servers.store";
+import {useServers}     from "../../../stores/lobby/servers.store";
 
 const ServerWindow = () => {
   const {servers, changeServer} = useServers();

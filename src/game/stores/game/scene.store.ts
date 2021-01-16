@@ -1,7 +1,7 @@
 import create, {State}       from "zustand";
 import {useEffect, useState} from "react";
 import {usePhaser}           from "./phaser.store";
-import {Position}            from "./shared/position";
+import {Position}            from "../shared/position";
 
 export interface SceneData {
   scene: string

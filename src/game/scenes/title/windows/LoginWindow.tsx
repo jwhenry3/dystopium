@@ -2,7 +2,7 @@ import React, {useCallback}  from "react";
 import {Field, Form, Formik} from "formik";
 import {Button, Input}       from "@material-ui/core";
 import "./windows.scss";
-import {useServers}          from "../../../stores/servers.store";
+import {useServers} from "../../../stores/lobby/servers.store";
 
 const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, register: () => void }) => {
   const server = useServers(useCallback(state => state.server, []));

@@ -1,5 +1,5 @@
 import create, {State} from "zustand";
-import {Position}      from "./shared/position";
+import {Position}      from "../shared/position";
 
 export interface LocationData extends State {
   entities: { [id: string]: Position }

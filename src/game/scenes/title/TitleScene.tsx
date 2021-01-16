@@ -5,10 +5,10 @@ import LoginWindow                                             from "./windows/L
 import ServerWindow                                            from "./windows/ServerWindow";
 import RegisterWindow                                          from "./windows/RegisterWindow";
 import CharactersWindow                                        from "./windows/CharactersWindow";
-import CreateCharacterWindow                                   from "./windows/CreateCharacterWindow";
-import {useSceneLifecycle}                                     from "../../stores/scene.store";
-import {useServers}                                            from "../../stores/servers.store";
-import {useCharacters}                                         from "../../stores/characters.store";
+import CreateCharacterWindow from "./windows/CreateCharacterWindow";
+import {useSceneLifecycle}   from "../../stores/game/scene.store";
+import {useServers}          from "../../stores/lobby/servers.store";
+import {useCharacters}     from "../../stores/lobby/characters.store";
 
 const NoUser = ({onLogin}: { onLogin: (user: any) => void }) => {
   const [view, setView] = useState('login');

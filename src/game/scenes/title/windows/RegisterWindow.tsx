@@ -1,7 +1,7 @@
 import {Field, Form, Formik} from "formik";
 import {Button, Input}       from "@material-ui/core";
-import React, {useCallback}  from "react";
-import {useServers}          from "../../../stores/servers.store";
+import React, {useCallback} from "react";
+import {useServers}         from "../../../stores/lobby/servers.store";
 
 const RegisterWindow = ({login, onRegister}: { login: () => void, onRegister: (user: any) => void }) => {
 

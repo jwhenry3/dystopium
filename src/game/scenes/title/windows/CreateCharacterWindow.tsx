@@ -1,8 +1,8 @@
 import {Button, Input}       from "@material-ui/core";
 import {Field, Form, Formik} from "formik";
-import React                 from "react";
-import {useCharacters}       from "../../../stores/characters.store";
-import {PlayerEquipment}     from "../../../state.models";
+import React             from "react";
+import {useCharacters}   from "../../../stores/lobby/characters.store";
+import {PlayerEquipment} from "../../../state.models";
 import {PlayerIdentity}      from "../../../state.models";
 
 const CreateCharacterWindow = ({onBack}: { onBack: () => void }) => {
