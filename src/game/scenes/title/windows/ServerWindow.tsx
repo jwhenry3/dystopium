@@ -1,13 +1,16 @@
 import {List, MenuItem} from "@material-ui/core";
+import {useServers}     from "../../../stores/servers.store";
 
-const ServerWindow = ({onServer}: { onServer: (server: string) => void }) => {
-
+const ServerWindow = () => {
+  const {servers, changeServer} = useServers();
   return <div className="window server">
     <strong>Servers</strong>
     <List>
-      <MenuItem onClick={() => onServer('test')}>
-        Test Server
-      </MenuItem>
+      {servers.map((server, index) => (
+        <MenuItem onClick={() => changeServer(server)} key={index}>
+          {server.name}
+        </MenuItem>
+      ))}
     </List>
   </div>;
 };

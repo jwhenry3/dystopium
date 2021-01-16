@@ -1,9 +1,11 @@
-import {Field, Form, Formik}      from "formik";
-import {Button, Input} from "@material-ui/core";
-import React                      from "react";
+import {Field, Form, Formik} from "formik";
+import {Button, Input}       from "@material-ui/core";
+import React, {useCallback}  from "react";
+import {useServers}          from "../../../stores/servers.store";
 
-const RegisterWindow = ({login, onRegister, server}: { login: () => void, onRegister: (user: any) => void, server: string }) => {
+const RegisterWindow = ({login, onRegister}: { login: () => void, onRegister: (user: any) => void }) => {
 
+  const server = useServers(useCallback(state => state.server, []));
   return <div className="window register">
     <strong>Register</strong>
     <Formik
@@ -12,7 +14,7 @@ const RegisterWindow = ({login, onRegister, server}: { login: () => void, onRegi
         password: ''
       }}
       onSubmit={values => {
-        console.log('Submit', values);
+        console.log('Submit', values, server?.name);
         onRegister({
           id: 1,
           username: values.username,

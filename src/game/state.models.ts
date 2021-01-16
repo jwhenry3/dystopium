@@ -11,7 +11,7 @@ export interface Party {
 
 export interface PlayerIdentity extends PlayerId {
   race: 'human' | string
-  gender: 'm' | 'f'
+  gender: 'male' | 'female'
   level: number
   map: string
 }

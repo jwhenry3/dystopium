@@ -1,10 +1,11 @@
-import React                 from "react";
+import React, {useCallback}  from "react";
 import {Field, Form, Formik} from "formik";
 import {Button, Input}       from "@material-ui/core";
 import "./windows.scss";
+import {useServers}          from "../../../stores/servers.store";
 
-const LoginWindow = ({onLogin, register, server}: { onLogin: (user: any) => void, register: () => void, server: string }) => {
-
+const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, register: () => void }) => {
+  const server = useServers(useCallback(state => state.server, []));
   return <div className="window login">
     <strong>Login</strong>
     <Formik
@@ -13,7 +14,7 @@ const LoginWindow = ({onLogin, register, server}: { onLogin: (user: any) => void
         password: ''
       }}
       onSubmit={values => {
-        console.log('Submit', values);
+        console.log('Submit', values, server?.name);
         onLogin({
           id: 1,
           username: values.username,
