@@ -19,7 +19,8 @@ const PlayModeWindow = () => {
           url: '',
           https: false,
           status: 'online',
-          capacity: 'low'
+          capacity: 'low',
+          host: 'Me'
         });
         changeAccount({
           id: 'offline',
