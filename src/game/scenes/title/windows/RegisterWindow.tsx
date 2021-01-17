@@ -5,9 +5,8 @@ import {useServers}           from "../../../stores/lobby/servers.store";
 
 const RegisterWindow = ({login, onRegister}: { login: () => void, onRegister: (user: any) => void }) => {
 
-  const {server, changeServer, changeType} = useServers(useCallback(({server, changeServer, changeType}) => ({
+  const {server, changeType} = useServers(useCallback(({server, changeType}) => ({
     server,
-    changeServer,
     changeType
   }), []));
   return <Paper>
@@ -34,7 +33,6 @@ const RegisterWindow = ({login, onRegister}: { login: () => void, onRegister: (u
       </Form>
     </Formik>
     <Button variant="outlined" onClick={() => {
-      changeServer(null);
       changeType(null);
     }}>
       Back

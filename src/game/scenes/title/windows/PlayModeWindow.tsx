@@ -17,6 +17,7 @@ const PlayModeWindow = () => {
         changeServer({
           name: 'Offline Play',
           url: '',
+          https: false,
           status: 'online',
           capacity: 'low'
         });

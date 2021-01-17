@@ -4,6 +4,7 @@ export interface ServerData {
   url: string;
   name: string;
   https: boolean;
+  host: string;
   status: 'online' | 'offline';
   capacity: 'full' | 'high' | 'medium' | 'low';
 }
@@ -25,7 +26,8 @@ export const useServers = create<ServerState>(set => ({
       url: 'localhost:3000',
       https: false,
       status: 'online',
-      capacity: 'low'
+      capacity: 'low',
+      host: 'Someone Else'
     }
   ],
   changeServer: (server: ServerData | null) => set({server}),

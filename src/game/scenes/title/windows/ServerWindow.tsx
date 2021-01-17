@@ -6,15 +6,11 @@ import PaddedDiv                                         from "../../../styled/P
 import {useAccount}                                      from "../../../stores/lobby/account.store";
 
 const ServerWindow = () => {
-  const {servers, changeServer, changeType, type} = useServers();
+  const {servers, changeServer, type} = useServers();
   const {changeAccount} = useAccount(useCallback(({changeAccount}) => ({changeAccount}), []));
   const [tab, setTab] = useState(0);
   const onBack = () => {
-    if (type === 'mmo') {
-      changeAccount(null);
-      return;
-    }
-    changeType(null);
+    changeAccount(null);
   };
   return <Paper>
     <Tabs value={tab} onChange={(event, newValue) => setTab(newValue)}>
@@ -24,7 +20,7 @@ const ServerWindow = () => {
     {tab === 0 ? <List>
                  {servers.map((server, index) => (
                    <MenuItem onClick={() => changeServer(server)} key={index}>
-                     {server.name}
+                     {server.name} {type === 'lobby' ? ' (Host:' + server.host + ')' : ''}
                    </MenuItem>
                  ))}
                </List> :

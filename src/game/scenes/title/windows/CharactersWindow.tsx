@@ -17,7 +17,6 @@ const CharacterList = styled('div')`
   }
 `;
 const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
-
   const {changeServer, type, changeType} = useServers(useCallback(({changeServer, type, changeType}) => ({
     changeServer,
     type,
@@ -31,15 +30,13 @@ const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterData | null>(null);
   const {changeScene} = useSceneData(useCallback(({changeScene}) => ({changeScene}), []));
   const onBack = () => {
-    if (type === 'mmo') {
-      changeServer(null);
-      return;
-    }
     if (type === 'offline') {
       changeServer(null);
       changeType(null);
+      changeAccount(null);
+      return;
     }
-    changeAccount(null);
+    changeServer(null);
   };
   const onPlay = () => {
     changeCharacter(selectedCharacter);

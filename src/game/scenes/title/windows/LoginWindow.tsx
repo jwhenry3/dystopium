@@ -4,9 +4,8 @@ import {Button, Input, Paper} from "@material-ui/core";
 import {useServers}           from "../../../stores/lobby/servers.store";
 
 const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, register: () => void }) => {
-  const {server, changeServer, changeType} = useServers(useCallback(({server, changeServer, changeType}) => ({
+  const {server, changeType} = useServers(useCallback(({server, changeType}) => ({
     server,
-    changeServer,
     changeType
   }), []));
   return <Paper>
@@ -32,7 +31,6 @@ const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, regist
       </Form>
     </Formik>
     <Button variant="outlined" onClick={() => {
-      changeServer(null);
       changeType(null);
     }}>
       Back
