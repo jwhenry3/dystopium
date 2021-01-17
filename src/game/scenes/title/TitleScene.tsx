@@ -32,9 +32,11 @@ const TitleScene: FC = () => {
   const render = () => {
     if (!type)
       return <PlayModeWindow/>;
+    if (type === 'mmo' && !account)
+      return <NoUser onLogin={changeAccount}/>;
     if (!server)
       return <ServerWindow/>;
-    if (!account)
+    if (type !== 'mmo' && !account)
       return <NoUser onLogin={changeAccount}/>;
     return (<Fragment>
       <CharactersWindow onCreate={() => setShowCreate(true)}/>

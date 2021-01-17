@@ -31,11 +31,15 @@ const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterData | null>(null);
   const {changeScene} = useSceneData(useCallback(({changeScene}) => ({changeScene}), []));
   const onBack = () => {
-    changeAccount(null);
+    if (type === 'mmo') {
+      changeServer(null);
+      return;
+    }
     if (type === 'offline') {
       changeServer(null);
       changeType(null);
     }
+    changeAccount(null);
   };
   const onPlay = () => {
     changeCharacter(selectedCharacter);
