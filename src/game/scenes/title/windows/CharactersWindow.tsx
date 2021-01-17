@@ -1,14 +1,49 @@
-import {useState}                     from "react";
-import {Button}                       from "@material-ui/core";
-import "./CharactersWindow.scss";
+import React, {useCallback, useState} from "react";
+import {Button, Paper}                from "@material-ui/core";
 import {CharacterData, useCharacters} from "../../../stores/lobby/characters.store";
+import styled                         from "@emotion/styled";
+import {useServers}                   from "../../../stores/lobby/servers.store";
+import {useAccount}                   from "../../../stores/lobby/account.store";
+import {useSceneData}                 from "../../../stores/game/scene.store";
 
-const CharactersWindow = ({onBack, onCreate}: { onBack: () => void, onCreate: () => void }) => {
-  const {characters, changeCharacter} = useCharacters();
+const CharacterList = styled('div')`
+  .character {
+    border: 1.5px solid #ccc;
+    border-radius: 16px;
+    font-size: 16px;
+    &.selected {
+      border: 1.5px solid indigo;
+    }
+  }
+`;
+const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
+
+  const {changeServer, type, changeType} = useServers(useCallback(({changeServer, type, changeType}) => ({
+    changeServer,
+    type,
+    changeType
+  }), []));
+  const {changeAccount} = useAccount(useCallback(({changeAccount}) => ({changeAccount}), []));
+  const {characters, changeCharacter} = useCharacters(useCallback(({characters, changeCharacter}) => ({
+    characters,
+    changeCharacter
+  }), []));
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterData | null>(null);
-  return <div className="window characters">
+  const {changeScene} = useSceneData(useCallback(({changeScene}) => ({changeScene}), []));
+  const onBack = () => {
+    changeAccount(null);
+    if (type === 'offline') {
+      changeServer(null);
+      changeType(null);
+    }
+  };
+  const onPlay = () => {
+    changeCharacter(selectedCharacter);
+    changeScene('example');
+  };
+  return <Paper>
     <strong>Characters</strong>
-    <div className="character-list">
+    <CharacterList>
       {characters.map((character, index) => (
         <div className={'character ' + (selectedCharacter?.identity.id === character.identity.id ? 'selected' : '')}
              key={index}
@@ -17,26 +52,23 @@ const CharactersWindow = ({onBack, onCreate}: { onBack: () => void, onCreate: ()
           <div className="character-name">{character.identity.name}</div>
         </div>
       ))}
-    </div>
+    </CharacterList>
     {selectedCharacter ? <div className="character-actions">
-      <Button variant="contained" color="primary" onClick={() => changeCharacter(selectedCharacter)}>
+      <Button variant="contained" color="primary" onClick={onPlay}>
         Play
       </Button>
       <Button variant="outlined">
         Delete
       </Button>
-      <Button color="primary" onClick={() => setSelectedCharacter(null)}>
-        Cancel
-      </Button>
     </div> : <div className="character-actions">
        <Button variant="contained" color="primary" onClick={onCreate}>
          Create Character
        </Button>
-       <Button color="primary" onClick={onBack}>
-         Cancel
-       </Button>
      </div>}
-  </div>;
+    <Button color="primary" onClick={selectedCharacter ? (() => setSelectedCharacter(null)) : onBack}>
+      Back
+    </Button>
+  </Paper>;
 };
 
 export default CharactersWindow;

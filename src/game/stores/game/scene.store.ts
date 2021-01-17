@@ -1,7 +1,7 @@
-import create, {State}       from "zustand";
-import {useEffect, useState} from "react";
-import {usePhaser}           from "./phaser.store";
-import {Position}            from "../shared/position";
+import create, {State}                    from "zustand";
+import {useCallback, useEffect, useState} from "react";
+import {usePhaser}                        from "./phaser.store";
+import {Position}                         from "../shared/position";
 
 export interface SceneData {
   scene: string
@@ -36,8 +36,12 @@ export const useSceneData = create<SceneConfig>((set): SceneConfig => ({
   changeScene: (scene: string) => set({currentScene: scene})
 }));
 
-export function useSceneLifecycle(key: string, cb: () => Phaser.Scene) {
+export function useSceneLifecycle(key: string, cb: (config: SceneData) => Phaser.Scene) {
   const {game} = usePhaser();
+  const {config, changeScene} = useSceneData(useCallback(({scenes, changeScene}) => ({
+    config: scenes[key],
+    changeScene
+  }), [key]));
   const [scene, setScene] = useState<Phaser.Scene | null>(null);
   useEffect(() => {
     if (game && key) {
@@ -46,7 +50,7 @@ export function useSceneLifecycle(key: string, cb: () => Phaser.Scene) {
         game.scene.remove(key);
       }
 
-      let newScene = cb();
+      let newScene = cb(config);
       game.scene.add(key, newScene);
 
       setScene(newScene);
@@ -56,6 +60,8 @@ export function useSceneLifecycle(key: string, cb: () => Phaser.Scene) {
         game.scene.remove(key);
       };
     }
-  }, [game, cb, key]);
-  return scene;
+  }, [config, game, cb, key]);
+  if (!game && !scene)
+    throw new Error("Could not load scene, Phaser or Scene not loaded.");
+  return {scene, changeScene};
 }

@@ -9,19 +9,16 @@ export interface ServerData {
 
 export interface ServerState extends State {
   server: ServerData | null;
+  type: 'offline' | 'lobby' | 'mmo' | null;
   servers: ServerData[];
   changeServer: (server: ServerData | null) => void;
+  changeType: (mode: 'offline' | 'lobby' | 'mmo' | null) => void;
 }
 
 export const useServers = create<ServerState>(set => ({
   server: null,
-  servers: [
-    {
-      name: 'Test Server',
-      url: 'ws://localhost:3000',
-      status: 'online',
-      capacity: 'low'
-    }
-  ],
-  changeServer: (server: ServerData | null) => set({server})
+  type: null,
+  servers: [],
+  changeServer: (server: ServerData | null) => set({server}),
+  changeType: (type) => set({type})
 }));

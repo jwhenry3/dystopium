@@ -1,7 +1,6 @@
-import {SceneProps} from "../props";
-import React, {FC}  from "react";
+import React, {FC} from "react";
 
-const UnknownScene: FC<SceneProps> = (props: SceneProps) => {
+const UnknownScene: FC = () => {
   return <div className="scene not-found">
     Scene not found
   </div>;

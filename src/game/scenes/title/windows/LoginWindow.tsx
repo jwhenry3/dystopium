@@ -1,12 +1,15 @@
-import React, {useCallback}  from "react";
-import {Field, Form, Formik} from "formik";
-import {Button, Input}       from "@material-ui/core";
-import "./windows.scss";
-import {useServers} from "../../../stores/lobby/servers.store";
+import React, {useCallback}   from "react";
+import {Field, Form, Formik}  from "formik";
+import {Button, Input, Paper} from "@material-ui/core";
+import {useServers}           from "../../../stores/lobby/servers.store";
 
 const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, register: () => void }) => {
-  const server = useServers(useCallback(state => state.server, []));
-  return <div className="window login">
+  const {server, changeServer, changeType} = useServers(useCallback(({server, changeServer, changeType}) => ({
+    server,
+    changeServer,
+    changeType
+  }), []));
+  return <Paper>
     <strong>Login</strong>
     <Formik
       initialValues={{
@@ -28,7 +31,13 @@ const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, regist
         <Button color="primary" type="button" onClick={register}>No Account? Register Now!</Button>
       </Form>
     </Formik>
-  </div>;
+    <Button variant="outlined" onClick={() => {
+      changeServer(null);
+      changeType(null);
+    }}>
+      Back
+    </Button>
+  </Paper>;
 };
 
 export default LoginWindow;

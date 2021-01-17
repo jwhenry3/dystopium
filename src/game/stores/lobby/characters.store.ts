@@ -1,4 +1,4 @@
-import {PlayerEquipment, PlayerIdentity} from "../../state.models";
+import {PlayerEquipment, PlayerIdentity} from "../shared/state.models";
 import create, {State}                   from "zustand";
 
 export interface CharacterData {

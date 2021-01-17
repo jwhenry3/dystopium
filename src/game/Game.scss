@@ -11,8 +11,11 @@
   .scene {
     position:relative;
     pointer-events: none;
-    .ui, .window {
+    .ui, .MuiPaper-root {
       pointer-events: all;
+    }
+    .MuiPaper-root {
+      padding: 12px;
     }
   }
 }

@@ -1,5 +1,5 @@
 import create, {State}                                                    from "zustand";
-import {PlayerDetails, PlayerEquipment, PlayerIdentity, PlayerStatPoints} from "../../state.models";
+import {PlayerDetails, PlayerEquipment, PlayerIdentity, PlayerStatPoints} from "../shared/state.models";
 
 export interface PlayersData extends State {
   identity: { [id: string]: PlayerIdentity } // player list, name over player in map, race, appearance etc (can view multiple at once)
