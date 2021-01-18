@@ -2,7 +2,7 @@ module.exports = {
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
       webpackConfig.module.rules.unshift({
-        test: /\.worker\.(js|ts)$/i,
+        test: /\.worker\.(ts)$/i,
         use: {
           loader: 'comlink-loader',
           options: {

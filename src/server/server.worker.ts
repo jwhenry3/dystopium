@@ -1,6 +1,24 @@
 import "./index";
 import PubSub                           from "pubsub-js";
 import {CreateCharacterData, Direction} from "./contracts";
+import lf                               from "lovefield";
+
+const schema = lf.schema.create('dystopium', 1);
+schema.createTable('Account')
+      .addColumn('username', lf.Type.STRING)
+      .addColumn('password', lf.Type.STRING)
+      .addPrimaryKey(['username']);
+
+schema.connect().then(async db => {
+  const table = db.getSchema().table('Account');
+  const row = table.createRow({
+    username: 'test',
+    password: 'pass'
+  });
+  await db.insertOrReplace().into(table).values([row]).exec();
+  const results = await db.select().from(table).where(table.username.eq('test')).exec();
+  console.log(results);
+});
 
 export async function processData(data: string) {
 
