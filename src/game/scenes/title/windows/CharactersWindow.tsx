@@ -1,10 +1,11 @@
-import React, {useCallback, useState} from "react";
-import {Button, Paper}                from "@material-ui/core";
-import {CharacterData, useCharacters} from "../../../stores/lobby/characters.store";
-import styled                         from "@emotion/styled";
-import {useServers}                   from "../../../stores/lobby/servers.store";
-import {useAccount}                   from "../../../stores/lobby/account.store";
-import {useSceneData}                 from "../../../stores/game/scene.store";
+import React, {useEffect, useState}                 from "react";
+import {Button, Paper}                              from "@material-ui/core";
+import {CharacterData, useCharacters}               from "../../../stores/lobby/characters.store";
+import styled                                       from "@emotion/styled";
+import {getTypeAndActions, useServers}              from "../../../stores/lobby/servers.store";
+import {useAccount}                                 from "../../../stores/lobby/account.store";
+import {getChangeScene, useSceneData}               from "../../../stores/game/scene.store";
+import {deleteRemoteCharacter, getRemoteCharacters} from "../../../api/characters";
 
 const CharacterList = styled('div')`
   .character {
@@ -17,18 +18,15 @@ const CharacterList = styled('div')`
   }
 `;
 const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
-  const {changeServer, type, changeType} = useServers(useCallback(({changeServer, type, changeType}) => ({
-    changeServer,
-    type,
-    changeType
-  }), []));
-  const {changeAccount} = useAccount(useCallback(({changeAccount}) => ({changeAccount}), []));
-  const {characters, changeCharacter} = useCharacters(useCallback(({characters, changeCharacter}) => ({
-    characters,
-    changeCharacter
-  }), []));
+  const {changeServer, type, changeType} = useServers(getTypeAndActions);
+  const {account, changeAccount} = useAccount();
+  const {characters, changeCharacter, loadCharacters} = useCharacters();
+  const changeScene = useSceneData(getChangeScene);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterData | null>(null);
-  const {changeScene} = useSceneData(useCallback(({changeScene}) => ({changeScene}), []));
+  const apiType = type === 'mmo' ? 'remote' : 'local';
+  useEffect(() => {
+    getRemoteCharacters(apiType, account!).then(loadCharacters);
+  }, [apiType, account, loadCharacters]);
   const onBack = () => {
     if (type === 'offline') {
       changeServer(null);
@@ -41,6 +39,12 @@ const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
   const onPlay = () => {
     changeCharacter(selectedCharacter);
     changeScene('example');
+  };
+  const onDelete = () => {
+    setSelectedCharacter(null);
+    deleteRemoteCharacter(apiType, account!, selectedCharacter!.identity.name).then(() => {
+      getRemoteCharacters(apiType, account!).then(loadCharacters);
+    });
   };
   return <Paper>
     <strong>Characters</strong>
@@ -58,7 +62,7 @@ const CharactersWindow = ({onCreate}: { onCreate: () => void }) => {
       <Button variant="contained" color="primary" onClick={onPlay}>
         Play
       </Button>
-      <Button variant="outlined">
+      <Button variant="outlined" onClick={onDelete}>
         Delete
       </Button>
     </div> : <div className="character-actions">

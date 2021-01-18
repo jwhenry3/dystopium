@@ -1,7 +1,7 @@
 export interface CreateCharacterData {
   name: string
   race: 'human' | string
-  gender: 'male' | 'female'
+  gender: 'male' | 'female' | string
 }
 
 export enum Stance {

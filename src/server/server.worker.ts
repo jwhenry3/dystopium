@@ -1,52 +1,66 @@
 import "./index";
 import PubSub                           from "pubsub-js";
 import {CreateCharacterData, Direction} from "./contracts";
-import lf                               from "lovefield";
+import {setupDatabase, waitForDatabase} from "./lovefield/setup-database";
+import {CharacterModel}                 from "./lovefield/entities";
+import {op}                             from "lovefield";
 
-const schema = lf.schema.create('dystopium', 1);
-schema.createTable('Account')
-      .addColumn('username', lf.Type.STRING)
-      .addColumn('password', lf.Type.STRING)
-      .addPrimaryKey(['username']);
+setupDatabase().then();
 
-schema.connect().then(async db => {
-  const table = db.getSchema().table('Account');
-  const row = table.createRow({
-    username: 'test',
-    password: 'pass'
-  });
-  await db.insertOrReplace().into(table).values([row]).exec();
-  const results = await db.select().from(table).where(table.username.eq('test')).exec();
-  console.log(results);
-});
-
-export async function processData(data: string) {
-
-  return data;
-}
-
-// Account
-
-export async function login(username: string, password: string) {
-
-}
-
-export async function register(username: string, password: string) {
-
+export async function addUser(username: string) {
+  try {
+    const db = await waitForDatabase();
+    const users = db.getSchema().table('users');
+    await db.insertOrReplace().into(users).values([users.createRow({
+      username
+    })]).exec();
+    return true;
+  } catch (e) {
+    console.warn(e);
+    return false;
+  }
 }
 
 // Character
 
-export function getCharacters(token: string) {
-
+export async function getCharacters(username: string): Promise<CharacterModel[]> {
+  try {
+    const db = await waitForDatabase();
+    const characters = db.getSchema().table('characters');
+    return (await db.select().from(characters).where(characters.user.eq(username)).exec()) as CharacterModel[];
+  } catch (e) {
+    console.warn(e);
+    return [];
+  }
 }
 
-export async function createCharacter(token: string, data: CreateCharacterData) {
-
+export async function createCharacter(username: string, data: CreateCharacterData) {
+  try {
+    const db = await waitForDatabase();
+    const characters = db.getSchema().table('characters');
+    await db.insertOrReplace().into(characters).values([characters.createRow({
+      user: username,
+      name: data.name,
+      race: data.race,
+      gender: data.gender
+    })]).exec();
+    return true;
+  } catch (e) {
+    console.warn(e);
+    return false;
+  }
 }
 
-export async function deleteCharacter(token: string, character: string) {
-
+export async function deleteCharacter(username: string, character: string) {
+  try {
+    const db = await waitForDatabase();
+    const characters = db.getSchema().table('characters');
+    await db.delete().from(characters).where(op.and(characters.user.eq(username), characters.name.eq(character))).exec();
+    return true;
+  } catch (e) {
+    console.warn(e);
+    return false;
+  }
 }
 
 export async function joinGame(token: string, character: string) {

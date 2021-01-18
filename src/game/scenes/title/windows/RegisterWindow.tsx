@@ -1,14 +1,11 @@
-import {Field, Form, Formik}  from "formik";
-import {Button, Input, Paper} from "@material-ui/core";
-import React, {useCallback}   from "react";
-import {useServers}           from "../../../stores/lobby/servers.store";
+import {Field, Form, Formik}             from "formik";
+import {Button, Input, Paper}            from "@material-ui/core";
+import React                             from "react";
+import {getServerAndActions, useServers} from "../../../stores/lobby/servers.store";
 
 const RegisterWindow = ({login, onRegister}: { login: () => void, onRegister: (user: any) => void }) => {
 
-  const {server, changeType} = useServers(useCallback(({server, changeType}) => ({
-    server,
-    changeType
-  }), []));
+  const {server, changeType} = useServers(getServerAndActions);
   return <Paper>
     <strong>Register</strong>
     <Formik

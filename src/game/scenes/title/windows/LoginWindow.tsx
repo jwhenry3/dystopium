@@ -1,13 +1,10 @@
-import React, {useCallback}   from "react";
-import {Field, Form, Formik}  from "formik";
-import {Button, Input, Paper} from "@material-ui/core";
-import {useServers}           from "../../../stores/lobby/servers.store";
+import React                             from "react";
+import {Field, Form, Formik}             from "formik";
+import {Button, Input, Paper}            from "@material-ui/core";
+import {getServerAndActions, useServers} from "../../../stores/lobby/servers.store";
 
 const LoginWindow = ({onLogin, register}: { onLogin: (user: any) => void, register: () => void }) => {
-  const {server, changeType} = useServers(useCallback(({server, changeType}) => ({
-    server,
-    changeType
-  }), []));
+  const {server, changeType} = useServers(getServerAndActions);
   return <Paper>
     <strong>Login</strong>
     <Formik

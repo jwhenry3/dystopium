@@ -12,7 +12,7 @@ export interface SceneData {
   portal: string[]
 }
 
-export interface SceneConfig extends State {
+export interface SceneState extends State {
   currentScene: string
   scenes: { [scene: string]: SceneData }
   changeScene: (scene: string) => void
@@ -29,19 +29,20 @@ const config = {
     portal: []
   }
 };
+export const getChangeScene = ({changeScene}: SceneState) => changeScene;
 
-export const useSceneData = create<SceneConfig>((set): SceneConfig => ({
+export const useSceneData = create<SceneState>((set): SceneState => ({
   currentScene: 'title',
   scenes: config,
   changeScene: (scene: string) => set({currentScene: scene})
 }));
 
 export function useSceneLifecycle(key: string, cb: (config: SceneData) => Phaser.Scene) {
-  const {game} = usePhaser();
   const {config, changeScene} = useSceneData(useCallback(({scenes, changeScene}) => ({
     config: scenes[key],
     changeScene
   }), [key]));
+  const {game} = usePhaser();
   const [scene, setScene] = useState<Phaser.Scene | null>(null);
   useEffect(() => {
     if (game && key) {

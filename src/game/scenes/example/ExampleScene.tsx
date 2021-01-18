@@ -1,17 +1,15 @@
-import React, {FC, useCallback} from "react";
-import Example                  from "./example";
-import {useSceneLifecycle}      from "../../stores/game/scene.store";
-import {useCharacters}          from "../../stores/lobby/characters.store";
-import {useServers}             from "../../stores/lobby/servers.store";
-import {useAccount}             from "../../stores/lobby/account.store";
+import React, {FC, useCallback}              from "react";
+import Example                               from "./example";
+import {useSceneLifecycle}                   from "../../stores/game/scene.store";
+import {getChangeCharacter, useCharacters} from "../../stores/lobby/characters.store";
+import {getServerActions, useServers}      from "../../stores/lobby/servers.store";
+import {getChangeAccount, useAccount}      from "../../stores/lobby/account.store";
+
 
 const ExampleScene: FC = () => {
-  const {changeServer, changeType} = useServers(useCallback(({changeServer, changeType}) => ({
-    changeServer,
-    changeType
-  }), []));
-  const {changeCharacter} = useCharacters(useCallback(({changeCharacter}) => ({changeCharacter}), []));
-  const {changeAccount} = useAccount(useCallback(({changeAccount}) => ({changeAccount}), []));
+  const {changeServer, changeType} = useServers(getServerActions);
+  const changeCharacter = useCharacters(getChangeCharacter);
+  const changeAccount = useAccount(getChangeAccount);
 
   const factory = useCallback(() => new Example(), []);
   const {changeScene} = useSceneLifecycle('example', factory);

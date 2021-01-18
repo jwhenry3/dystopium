@@ -1,13 +1,17 @@
-import {Button, Dialog, DialogTitle, Input} from "@material-ui/core";
-import {Field, Form, Formik}                from "formik";
-import React                                from "react";
-import {useCharacters}                      from "../../../stores/lobby/characters.store";
-import {PlayerEquipment}                    from "../../../stores/shared/state.models";
-import {PlayerIdentity}                     from "../../../stores/shared/state.models";
-import PaddedDiv                            from "../../../styled/PaddedDiv";
+import {Button, Dialog, DialogTitle, Input}         from "@material-ui/core";
+import {Field, Form, Formik}                        from "formik";
+import React                                        from "react";
+import {getLoadCharacters, useCharacters}           from "../../../stores/lobby/characters.store";
+import PaddedDiv                                    from "../../../styled/PaddedDiv";
+import {getType, useServers}                        from "../../../stores/lobby/servers.store";
+import {useAccount}                                 from "../../../stores/lobby/account.store";
+import {createRemoteCharacter, getRemoteCharacters} from "../../../api/characters";
+
 
 const CreateCharacterWindow = ({onBack}: { onBack: () => void }) => {
-  const {characters, loadCharacters} = useCharacters();
+  const type = useServers(getType);
+  const {account} = useAccount();
+  const loadCharacters = useCharacters(getLoadCharacters);
   return <Dialog onClose={onBack} open={true}>
     <DialogTitle>Create Character</DialogTitle>
     <PaddedDiv>
@@ -19,32 +23,16 @@ const CreateCharacterWindow = ({onBack}: { onBack: () => void }) => {
         }}
         onSubmit={values => {
           console.log('Submit', values);
-          loadCharacters([
-            ...characters,
-            {
-              identity: {
-                id: 'test',
-                name: values.name,
-                gender: values.gender,
-                race: values.race,
-                level: 1,
-                map: 'tutorial'
-              } as PlayerIdentity,
-              equipment: {
-                weapons: [null],
-                head: null,
-                neck: null,
-                chest: null,
-                hands: null,
-                waist: null,
-                legs: null,
-                feet: null,
-                back: null,
-                leftRing: null,
-                rightRing: null
-              } as PlayerEquipment
-            }
-          ]);
+          const apiType = type === 'mmo' ? 'remote' : 'local';
+          if (type === 'offline') {
+            createRemoteCharacter(apiType, account!, {
+              name: values.name,
+              gender: values.gender,
+              race: values.race
+            }).then(() => {
+              getRemoteCharacters(apiType, account!).then(loadCharacters);
+            })
+          }
           onBack();
         }}>
         <Form autoComplete="off" noValidate>

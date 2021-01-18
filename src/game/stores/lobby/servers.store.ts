@@ -16,7 +16,25 @@ export interface ServerState extends State {
   changeServer: (server: ServerData | null) => void;
   changeType: (mode: 'offline' | 'lobby' | 'mmo' | null) => void;
 }
-
+export const getType = ({type}:ServerState) => type;
+export const getServerAndType = ({server, type}: ServerState) => ({
+  server,
+  type,
+});
+export const getServerActions = ({changeServer, changeType}: ServerState) => ({
+  changeServer,
+  changeType
+});
+export const getTypeAndActions = ({changeServer, type, changeType}: ServerState) => ({
+  type,
+  changeServer,
+  changeType
+});
+export const getServerAndActions = ({changeServer, server, changeType}: ServerState) => ({
+  server,
+  changeServer,
+  changeType
+});
 export const useServers = create<ServerState>(set => ({
   server: null,
   type: null,

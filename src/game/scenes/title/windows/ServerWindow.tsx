@@ -1,9 +1,9 @@
 import {Button, Input, List, MenuItem, Paper, Tab, Tabs} from "@material-ui/core";
-import {useServers}                                      from "../../../stores/lobby/servers.store";
+import {getTypeAndActions, useServers}                   from "../../../stores/lobby/servers.store";
 import React, {useCallback, useState}                    from "react";
 import {Field, Form, Formik}                             from "formik";
 import PaddedDiv                                         from "../../../styled/PaddedDiv";
-import {useAccount}                                      from "../../../stores/lobby/account.store";
+import {getChangeAccount, useAccount}                    from "../../../stores/lobby/account.store";
 
 const ServerList = () => {
   const {servers, changeServer, type} = useServers();
@@ -32,8 +32,8 @@ const HostServer = () => {
   </PaddedDiv>;
 };
 const ServerWindow = () => {
-  const {type} = useServers(useCallback(({type}) => ({type}), []));
-  const {changeAccount} = useAccount(useCallback(({changeAccount}) => ({changeAccount}), []));
+  const {type} = useServers(getTypeAndActions);
+  const changeAccount = useAccount(getChangeAccount);
   const [tab, setTab] = useState(0);
   const onBack = () => {
     changeAccount(null);

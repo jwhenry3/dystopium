@@ -1,12 +1,14 @@
 import {PlayerEquipment, PlayerIdentity} from "../shared/state.models";
 import create, {State}                   from "zustand";
+import {subscribe}                       from "../../../server/server.worker";
+import {proxy}                           from "comlink";
 
 export interface CharacterData {
   identity: PlayerIdentity;
   equipment: PlayerEquipment;
 }
 
-export interface CharactersData extends State {
+export interface CharactersState extends State {
   character: CharacterData | null;
   characters: CharacterData[];
   changeCharacter: (character: CharacterData | null) => void;
@@ -17,8 +19,9 @@ const data = {
   character: null,
   characters: []
 };
-
-export const useCharacters = create<CharactersData>((set): CharactersData => ({
+export const getChangeCharacter = ({changeCharacter}: CharactersState) => changeCharacter;
+export const getLoadCharacters = ({loadCharacters}: CharactersState) => loadCharacters;
+export const useCharacters = create<CharactersState>((set): CharactersState => ({
   ...data,
   changeCharacter: (character: CharacterData | null) => set({character}),
   loadCharacters: (characters: CharacterData[]) => set({character: null, characters})

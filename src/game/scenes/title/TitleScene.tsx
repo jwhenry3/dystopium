@@ -6,7 +6,7 @@ import RegisterWindow                               from "./windows/RegisterWind
 import CharactersWindow                             from "./windows/CharactersWindow";
 import CreateCharacterWindow                        from "./windows/CreateCharacterWindow";
 import {useSceneLifecycle}                          from "../../stores/game/scene.store";
-import {useServers}                                 from "../../stores/lobby/servers.store";
+import {getServerAndType, useServers}               from "../../stores/lobby/servers.store";
 import PlayModeWindow                               from "./windows/PlayModeWindow";
 import {useAccount}                                 from "../../stores/lobby/account.store";
 
@@ -17,11 +17,7 @@ const NoUser = ({onLogin}: { onLogin: (user: any) => void }) => {
   return <RegisterWindow login={() => setView('login')} onRegister={onLogin}/>
 };
 const TitleScene: FC = () => {
-  const {server, type} = useServers(useCallback(({server, changeServer, type}) => ({
-    server,
-    changeServer,
-    type,
-  }), []));
+  const {server, type} = useServers(getServerAndType);
   const factory = useCallback(() => new Title(), []);
   useSceneLifecycle('title', factory);
   const {account, changeAccount} = useAccount();
