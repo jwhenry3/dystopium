@@ -4,6 +4,7 @@ import {useSceneLifecycle}                   from "../../stores/game/scene.store
 import {getChangeCharacter, useCharacters} from "../../stores/lobby/characters.store";
 import {getServerActions, useServers}      from "../../stores/lobby/servers.store";
 import {getChangeAccount, useAccount}      from "../../stores/lobby/account.store";
+import { Button } from "@material-ui/core";
 
 
 const ExampleScene: FC = () => {
@@ -23,7 +24,7 @@ const ExampleScene: FC = () => {
   return <div className="scene example">
     <div>Example Works!</div>
     <div className="ui">
-      <button onClick={onBackToTitle}>To Title</button>
+      <Button variant="contained" onClick={onBackToTitle}>To Title</Button>
     </div>
   </div>;
 };

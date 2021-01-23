@@ -11,7 +11,7 @@ const CharacterList = styled.div`
   margin: 12px 0;
   .character {
     border: 1.5px solid transparent;
-    border-radius: 16px;
+    border-radius: 4px;
     font-size: 16px;
     min-height: 32px;
     align-items: center;
