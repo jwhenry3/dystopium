@@ -3,7 +3,11 @@ import "phaser";
 import Game                            from "./game/Game";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core";
 
-const theme = createMuiTheme({});
+const theme = createMuiTheme({
+  palette: {
+    mode: 'dark'
+  }
+});
 
 function App() {
   return (

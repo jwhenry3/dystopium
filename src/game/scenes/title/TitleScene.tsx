@@ -1,40 +1,40 @@
-import React, {FC, Fragment, useCallback, useState} from "react";
-import Title                                        from "./title";
-import LoginWindow                                  from "./windows/LoginWindow";
-import ServerWindow                                 from "./windows/ServerWindow";
-import RegisterWindow                               from "./windows/RegisterWindow";
-import CharactersWindow                             from "./windows/CharactersWindow";
-import CreateCharacterWindow                        from "./windows/CreateCharacterWindow";
-import {useSceneLifecycle}                          from "../../stores/game/scene.store";
-import {getServerAndType, useServers}               from "../../stores/lobby/servers.store";
-import PlayModeWindow                               from "./windows/PlayModeWindow";
-import {useAccount}                                 from "../../stores/lobby/account.store";
+import React, { FC, Fragment, useCallback, useState } from "react";
+import Title                                          from "./title";
+import LoginWindow                                    from "./windows/LoginWindow";
+import ServerWindow                                   from "./windows/ServerWindow";
+import RegisterWindow                                 from "./windows/RegisterWindow";
+import CharactersWindow                               from "./windows/CharactersWindow";
+import CreateCharacterWindow                          from "./windows/CreateCharacterWindow";
+import { useSceneLifecycle }                          from "../../stores/game/scene.store";
+import { getServerAndType, useServers }               from "../../stores/lobby/servers.store";
+import PlayModeWindow                                 from "./windows/PlayModeWindow";
+import { useAccount }                                 from "../../stores/lobby/account.store";
 
-const NoUser = ({onLogin}: { onLogin: (user: any) => void }) => {
+const NoUser = ({ onLogin }: { onLogin: (user: any) => void }) => {
   const [view, setView] = useState('login');
   if (view === 'login')
-    return <LoginWindow onLogin={onLogin} register={() => setView('register')}/>;
-  return <RegisterWindow login={() => setView('login')} onRegister={onLogin}/>
+    return <LoginWindow onLogin={onLogin} register={() => setView('register')} />;
+  return <RegisterWindow login={() => setView('login')} onRegister={onLogin} />
 };
 const TitleScene: FC = () => {
-  const {server, type} = useServers(getServerAndType);
+  const { server, type } = useServers(getServerAndType);
   const factory = useCallback(() => new Title(), []);
   useSceneLifecycle('title', factory);
-  const {account, changeAccount} = useAccount();
+  const { account, changeAccount } = useAccount();
 
 
   // lobby flow for getting into the game
   const [showCreate, setShowCreate] = useState<boolean>(false);
   const render = () => {
     if (!type)
-      return <PlayModeWindow/>;
+      return <PlayModeWindow />;
     if (!account)
-      return <NoUser onLogin={changeAccount}/>;
+      return <NoUser onLogin={changeAccount} />;
     if (!server)
-      return <ServerWindow/>;
+      return <ServerWindow />;
     return (<Fragment>
-      <CharactersWindow onCreate={() => setShowCreate(true)}/>
-      {showCreate && <CreateCharacterWindow onBack={() => setShowCreate(false)}/>}
+      {showCreate ? <CreateCharacterWindow onBack={() => setShowCreate(false)} />
+                  : <CharactersWindow onCreate={() => setShowCreate(true)} />}
     </Fragment>);
   };
 
