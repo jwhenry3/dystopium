@@ -1,4 +1,4 @@
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 
 export interface SceneHook {
   scene: BaseScene;
@@ -11,11 +11,12 @@ export interface SceneHookWithData<C = {}> {
 
 export class BaseScene extends Phaser.Scene {
 
+  actors!: Phaser.GameObjects.Group;
   hasPreloaded = false;
   hasCreated = false;
 
-  onPreload = new Subject<SceneHook>();
-  onCreate = new Subject<SceneHook>();
+  onPreload = new BehaviorSubject<SceneHook | null>(null);
+  onCreate = new BehaviorSubject<SceneHook | null>(null);
   onUpdate = new Subject<SceneHookWithData<{ time: number, delta: number }>>();
 
   preload() {
@@ -25,8 +26,9 @@ export class BaseScene extends Phaser.Scene {
   }
 
   create() {
-    this.onCreate.next({ scene: this });
+    this.actors = this.add.group({ runChildUpdate: true });
     this.hasCreated = true;
+    this.onCreate.next({ scene: this });
   }
 
   update(time: number, delta: number): void {

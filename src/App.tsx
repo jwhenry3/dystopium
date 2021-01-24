@@ -1,7 +1,7 @@
 import './App.css';
 import "phaser";
-import Game                            from "./game/Game";
-import {createMuiTheme, ThemeProvider} from "@material-ui/core";
+import Game                              from "./game/Game";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 
 const theme = createMuiTheme({
   palette: {
@@ -14,7 +14,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <header className="App-header">
-          <Game/>
+          <Game />
         </header>
       </div>
     </ThemeProvider>

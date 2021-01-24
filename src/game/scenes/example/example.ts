@@ -21,8 +21,4 @@ export default class Example extends BaseScene {
       }
     }
   }
-
-  update(time: number, delta: number): void {
-    super.update(time, delta);
-  }
 }

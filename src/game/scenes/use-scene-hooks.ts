@@ -1,8 +1,8 @@
 import { useCallback, useEffect }                  from "react";
 import { BaseScene, SceneHook, SceneHookWithData } from "./base-scene";
 import { usePhaser }                               from "../stores/game/phaser.store";
-import { Subject }                                 from "rxjs";
-import { takeUntil }                               from "rxjs/operators";
+import { Observable, Subject }                     from "rxjs";
+import { filter, first, takeUntil }                from "rxjs/operators";
 
 
 export interface SceneHookConfig {
@@ -11,6 +11,10 @@ export interface SceneHookConfig {
   update?: (hook: SceneHookWithData<{ time: number, delta: number }>) => void;
   destroy?: (hook: SceneHook) => void;
 }
+
+const waitForData = <T>(observable: Observable<any>): Observable<T> => {
+  return observable.pipe(filter(data => !!data));
+};
 
 export function useSceneHooks(key: string, config: SceneHookConfig) {
   const game = usePhaser(useCallback(({ game }) => game as Phaser.Game, []));
@@ -22,13 +26,13 @@ export function useSceneHooks(key: string, config: SceneHookConfig) {
     const stop = new Subject();
     if (config.preload) {
       scene?.hasPreloaded && config.preload({ scene });
-      scene.onPreload.pipe(takeUntil(stop)).subscribe((hook: SceneHook) => {
+      waitForData<SceneHook>(scene.onPreload.pipe(takeUntil(stop))).subscribe((hook: SceneHook) => {
         config.preload && config.preload(hook);
       });
     }
     if (config.create) {
       scene?.hasCreated && config.create({ scene });
-      scene.onCreate.pipe(takeUntil(stop)).subscribe((hook: SceneHook) => {
+      scene.onUpdate.pipe(takeUntil(stop), first()).subscribe((hook: SceneHookWithData<{ time: number, delta: number }>) => {
         config.create && config.create(hook);
       });
     }

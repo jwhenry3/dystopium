@@ -17,7 +17,7 @@ export function usePhaserLifecycle(ref: MutableRefObject<HTMLCanvasElement | nul
   useEffect(() => {
     if (!phaser.game && ref.current) {
       const newGame = new Phaser.Game({
-        type: Phaser.CANVAS,
+        type: Phaser.WEBGL,
         canvas: ref.current,
         scale: {
           mode: Phaser.Scale.RESIZE

@@ -5,7 +5,7 @@ import { getChangeCharacter, useCharacters } from "../../stores/lobby/characters
 import { getServerActions, useServers }      from "../../stores/lobby/servers.store";
 import { getChangeAccount, useAccount }      from "../../stores/lobby/account.store";
 import { Button }                            from "@material-ui/core";
-import Character                             from "../../actors/Character";
+import CharacterComponent                             from "../../actors/CharacterComponent";
 
 
 const ExampleScene: FC = () => {
@@ -22,12 +22,11 @@ const ExampleScene: FC = () => {
     changeType(null);
     changeScene('title');
   }, [changeAccount, changeCharacter, changeServer, changeType, changeScene]);
-  console.log('tick!');
   return <div className="scene example">
     <div>Example Works!</div>
     <div className="ui">
       <Button variant="contained" onClick={onBackToTitle}>To Title</Button>
-      <Character />
+      <CharacterComponent />
     </div>
   </div>;
 };

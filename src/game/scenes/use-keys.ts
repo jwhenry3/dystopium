@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { usePhaser }                      from "../stores/game/phaser.store";
 import { BaseScene }                      from "./base-scene";
-
-export interface KeyMap {
-  [key: string]: Phaser.Input.Keyboard.Key | null;
-}
+import { KeyMap }                         from "./input/keys";
 
 export default function useKeys(sceneKey: string, keys: string[]) {
   const game = usePhaser(useCallback(({ game }) => game as Phaser.Game, []));
