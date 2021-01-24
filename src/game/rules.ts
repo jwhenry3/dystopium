@@ -1,4 +1,4 @@
 export const GameRules = {
-  speed: 4,
+  speed: 100,
 
 };

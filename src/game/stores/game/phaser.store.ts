@@ -22,6 +22,12 @@ export function usePhaserLifecycle(ref: MutableRefObject<HTMLCanvasElement | nul
         scale: {
           mode: Phaser.Scale.RESIZE
         },
+        physics: {
+          default: 'arcade',
+          arcade: {
+            fps: 30
+          }
+        },
         scene: []
       });
       phaser.setGame(newGame);

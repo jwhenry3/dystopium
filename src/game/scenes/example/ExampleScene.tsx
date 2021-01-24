@@ -22,6 +22,7 @@ const ExampleScene: FC = () => {
     changeType(null);
     changeScene('title');
   }, [changeAccount, changeCharacter, changeServer, changeType, changeScene]);
+  console.log('tick!');
   return <div className="scene example">
     <div>Example Works!</div>
     <div className="ui">

@@ -13,32 +13,37 @@ export default function Character(): ReactElement {
   const keys = useKeys(sceneKey, ['w', 'a', 's', 'd']);
   useSceneHooks(sceneKey, {
     create({ scene }) {
-      sprite.current = scene.add.circle(100, 100, 16, Phaser.Display.Color.GetColor32(30, 100, 200, 0.5));
     },
-    update(hook) {
-      if (sprite.current !== null) {
-        let speed = singleSpeed;
-        if (keys.current.w?.isDown || keys.current.s?.isDown) {
-          if (keys.current.a?.isDown || keys.current.d?.isDown) {
-            speed = diagonalSpeed;
-          }
-        }
-        if (keys.current.w?.isDown) {
-          (sprite.current as Phaser.GameObjects.Arc).setPosition(sprite.current.x, sprite.current.y - speed);
-        }
-        if (keys.current.s?.isDown) {
-          (sprite.current as Phaser.GameObjects.Arc).setPosition(sprite.current.x, sprite.current.y + speed);
-        }
-        if (keys.current.a?.isDown) {
-          (sprite.current as Phaser.GameObjects.Arc).setPosition(sprite.current.x - speed, sprite.current.y);
-        }
-        if (keys.current.d?.isDown) {
-          (sprite.current as Phaser.GameObjects.Arc).setPosition(sprite.current.x + speed, sprite.current.y);
-        }
+    update({ scene }) {
+      if (sprite.current === null) {
+        sprite.current = scene.add.circle(100, 100, 16, Phaser.Display.Color.GetColor32(30, 100, 200, 0.5));
+        console.log(scene.physics);
+        scene.physics.add.existing(sprite.current);
+        return;
       }
+      const velocity = { x: 0, y: 0 };
+      if (keys.current.w?.isDown) {
+        velocity.y = -1;
+      }
+      if (keys.current.s?.isDown) {
+        velocity.y = +1;
+      }
+      if (keys.current.a?.isDown) {
+        velocity.x = -1;
+      }
+      if (keys.current.d?.isDown) {
+        velocity.x = +1;
+      }
+      const entity = sprite.current as Phaser.GameObjects.Arc;
+      let speed = singleSpeed;
+      if (velocity.x !== 0 && velocity.y !== 0) {
+        speed = diagonalSpeed;
+      }
+      (entity.body as Phaser.Physics.Arcade.Body).setVelocity(velocity.x * speed, velocity.y * speed);
     },
     destroy() {
       sprite.current?.destroy();
+      sprite.current = null;
     }
   });
   return <></>;

@@ -1,7 +1,5 @@
 import {PlayerEquipment, PlayerIdentity} from "../shared/state.models";
 import create, {State}                   from "zustand";
-import {subscribe}                       from "../../../server/server.worker";
-import {proxy}                           from "comlink";
 
 export interface CharacterData {
   identity: PlayerIdentity;
