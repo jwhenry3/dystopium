@@ -1,13 +1,5 @@
-import { BehaviorSubject, Subject } from "rxjs";
-
-export interface SceneHook {
-  scene: BaseScene;
-}
-
-export interface SceneHookWithData<C = {}> {
-  scene: BaseScene;
-  data: C
-}
+import { BehaviorSubject, Subject }     from "rxjs";
+import { SceneHook, SceneHookWithData } from "../interfaces/scene-hook";
 
 export class BaseScene extends Phaser.Scene {
 
@@ -15,9 +7,9 @@ export class BaseScene extends Phaser.Scene {
   hasPreloaded = false;
   hasCreated = false;
 
-  onPreload = new BehaviorSubject<SceneHook | null>(null);
-  onCreate = new BehaviorSubject<SceneHook | null>(null);
-  onUpdate = new Subject<SceneHookWithData<{ time: number, delta: number }>>();
+  onPreload = new BehaviorSubject<SceneHook<BaseScene> | null>(null);
+  onCreate = new BehaviorSubject<SceneHook<BaseScene> | null>(null);
+  onUpdate = new Subject<SceneHookWithData<{ time: number, delta: number }, BaseScene>>();
 
   preload() {
     this.onPreload.next({ scene: this });

@@ -1,8 +1,8 @@
 import { ReactElement, useCallback, useRef } from "react";
-import { useSceneData }                      from "../stores/game/scene.store";
-import { useSceneHooks }                     from "../scenes/use-scene-hooks";
-import useKeys                               from "../scenes/use-keys";
-import { Character }                         from "./character";
+import { useSceneData }  from "../stores/game/scene.store";
+import { useSceneHooks } from "../hooks/use-scene-hooks";
+import useKeys           from "../hooks/use-keys";
+import { Character }     from "./character";
 
 export default function CharacterComponent(): ReactElement {
   const sceneKey = useSceneData(useCallback(({ currentScene }) => currentScene, []));

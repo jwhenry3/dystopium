@@ -1,6 +1,7 @@
-import { BaseScene }   from "../scenes/base-scene";
-import { KeyMap }      from "../scenes/input/keys";
-import { getVelocity } from "../input/get-velocity";
+import { BaseScene }    from "../scenes/base-scene";
+import { KeyMap }       from "../interfaces/keys";
+import { getVelocity }  from "../utils/get-velocity";
+import { getDirection } from "../utils/get-direction";
 
 export class Character extends Phaser.GameObjects.Arc {
 
@@ -25,7 +26,7 @@ export class Character extends Phaser.GameObjects.Arc {
 
   update(...args: any[]): void {
     super.update(...args);
-    const { x, y } = getVelocity(this.keys as KeyMap);
+    const { x, y } = getVelocity(...getDirection(this.keys as KeyMap));
     if (x !== this.lastVel.x || y !== this.lastVel.y) {
       this.lastVel = { x, y };
       (this.body as Phaser.Physics.Arcade.Body).setVelocity(x, y);
