@@ -5,7 +5,7 @@ export interface GameRules extends State {
 }
 
 // Preload from file or server
-const config = {
+const config: GameRules = {
   movementSpeed: 1
 };
 

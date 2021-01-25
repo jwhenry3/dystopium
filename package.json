@@ -65,6 +65,8 @@
     ]
   },
   "devDependencies": {
-    "@types/socket.io-client": "^1.4.35"
+    "@types/socket.io-client": "^1.4.35",
+    "worker-loader": "^3.0.7",
+    "worker-plugin": "^5.0.0"
   }
 }

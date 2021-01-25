@@ -10,6 +10,7 @@ function buildKeys(scene: Phaser.Scene, keys: string[]) {
   }
   return map;
 }
+
 export default function useKeys(sceneKey: string, keys: string[]) {
   const game = usePhaser(useCallback(({ game }) => game as Phaser.Game, []));
   const keyMap = useRef<KeyMap>({});
