@@ -10,6 +10,7 @@ export interface CollisionConfig {
   points: Point[];
 }
 export interface MapConfig {
+  name: string;
   objects: ObjectConfig[];
   collisions: CollisionConfig[];
 }

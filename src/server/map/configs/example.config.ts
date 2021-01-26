@@ -1,6 +1,7 @@
 import { MapConfig } from "../loader";
 
 export const exampleConfig: MapConfig = {
+  name: "Example World",
   objects: [],
   collisions: [
     {

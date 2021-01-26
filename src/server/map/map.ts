@@ -1,14 +1,13 @@
-import { wrap } from "comlink";
+import { Remote, wrap } from "comlink";
 
 export declare type MapWorker = import("./map.worker").MapWorker;
 
-export async function startMap(map: string): Promise<MapWorker> {
+export async function startMap(map: string) {
   const worker = new Worker("./map.worker", {
     name: `map-${map}`,
     type: "module",
   });
-  const workerInstance = wrap<MapWorker>(worker);
-  await workerInstance.load(map);
-
-  return workerInstance as MapWorker;
+  const mapWorker = wrap<MapWorker>(worker) as Remote<MapWorker>;
+  await mapWorker.load(map);
+  return { worker, mapWorker };
 }

@@ -1,9 +1,9 @@
 import { expose } from "comlink";
 import { DirectionVector } from "../../game/utils/get-direction";
-import { ExampleWorld } from "./example/example.world";
-import { BaseWorld } from "./base.world";
+import { GameWorld } from "./game.world";
+import { exampleConfig } from "./configs/example.config";
 const state: {
-  world: BaseWorld | null;
+  world: GameWorld | null;
 } = {
   world: null,
 };
@@ -12,11 +12,12 @@ async function load(map: string) {
   if (!state.world) {
     console.log("loading", map);
     if (map === "example") {
-      state.world = new ExampleWorld();
-      state.world.start();
-      return;
+      state.world = new GameWorld(exampleConfig.name, exampleConfig);
     }
   }
+  console.log("starting", map);
+  state.world?.clear();
+  state.world?.start();
 }
 
 async function start() {

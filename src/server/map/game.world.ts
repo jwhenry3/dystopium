@@ -1,7 +1,8 @@
 import { World, Body, Circle, WorldOptions } from "p2";
 import { DirectionVector } from "../../game/utils/get-direction";
+import { loadMapConfig, MapConfig } from "./loader";
 
-export class BaseWorld extends World {
+export class GameWorld extends World {
   protected fixedTimeStep = 1 / 30;
   protected maxSubSteps = 10;
   protected running = false;
@@ -9,11 +10,16 @@ export class BaseWorld extends World {
 
   characters: { [name: string]: Body } = {};
 
-  constructor(public name: string, worldOptions?: WorldOptions) {
+  constructor(
+    public name: string,
+    mapConfig: MapConfig,
+    worldOptions?: WorldOptions
+  ) {
     super({
       gravity: [0, 0],
       ...worldOptions,
     });
+    loadMapConfig(this, mapConfig);
   }
 
   addCharacter(name: string, x: number, y: number) {
