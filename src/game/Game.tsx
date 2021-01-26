@@ -5,7 +5,7 @@ import ExampleScene from "./scenes/example/ExampleScene";
 import { usePhaserLifecycle } from "./stores/game/phaser.store";
 import "./Game.scss";
 import { SceneState, useSceneData } from "./stores/game/scene.store";
-import { useWorldsLifecycle } from "./stores/game/server.store";
+import { useWorldsLifecycle } from "./stores/game/maps.store";
 
 const scenes: { [key: string]: FC } = {
   title: TitleScene,

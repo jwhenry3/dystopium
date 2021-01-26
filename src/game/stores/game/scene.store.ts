@@ -2,6 +2,7 @@ import create, { State } from "zustand";
 import { useCallback, useEffect, useState } from "react";
 import { usePhaser } from "./phaser.store";
 import { Position } from "../shared/position";
+import { BaseScene } from "../../scenes/base-scene";
 
 export interface SceneData {
   scene: string;
@@ -41,7 +42,7 @@ export const useSceneData = create<SceneState>(
 
 export function useSceneLifecycle(
   key: string,
-  cb: (config: SceneData) => Phaser.Scene
+  cb: (config: SceneData) => BaseScene
 ) {
   const { config, changeScene } = useSceneData(
     useCallback(
@@ -53,7 +54,7 @@ export function useSceneLifecycle(
     )
   );
   const { game } = usePhaser();
-  const [scene, setScene] = useState<Phaser.Scene | null>(null);
+  const [scene, setScene] = useState<BaseScene | null>(null);
   useEffect(() => {
     if (game?.isRunning && key) {
       if (game.scene.getScene(key)) {

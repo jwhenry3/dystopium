@@ -1,8 +1,7 @@
 import { BaseScene } from "../scenes/base-scene";
 import { KeyMap } from "../interfaces/keys";
 import { getVelocity } from "../utils/get-velocity";
-import { DirectionVector, getDirection } from "../utils/get-direction";
-import { isInWebWorker } from "../../server/util";
+import { DirectionVector } from "../utils/get-direction";
 
 export class Character extends Phaser.GameObjects.Arc {
   keys: KeyMap = {};
@@ -11,6 +10,7 @@ export class Character extends Phaser.GameObjects.Arc {
 
   constructor(
     public scene: BaseScene,
+    public name: string,
     x: number,
     y: number,
     public isLocalPlayer = false
@@ -28,14 +28,12 @@ export class Character extends Phaser.GameObjects.Arc {
     );
     this.scene.actors.add(this, true);
     this.scene.physics.add.existing(this);
+    this.scene.characters[this.name] = this;
   }
 
   update(...args: any[]): void {
     super.update(...args);
-    const directions: DirectionVector =
-      isInWebWorker() || !this.isLocalPlayer
-        ? this.directions
-        : getDirection(this.keys as KeyMap);
+    const directions: DirectionVector = this.directions;
     const { x, y } = getVelocity(...directions);
     if (x !== this.lastVel.x || y !== this.lastVel.y) {
       this.lastVel = { x, y };

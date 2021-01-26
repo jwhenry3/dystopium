@@ -25,6 +25,7 @@
     "comlink-loader": "^2.0.0",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
+    "lodash": "^4.17.20",
     "lovefield": "^2.1.12",
     "node-sass": "^4.14.1",
     "p2": "^0.7.1",
@@ -65,6 +66,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.168",
     "@types/p2": "^0.7.36",
     "@types/socket.io-client": "^1.4.35",
     "worker-loader": "^3.0.7",

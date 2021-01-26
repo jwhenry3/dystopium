@@ -2,6 +2,8 @@ import { expose } from "comlink";
 import { DirectionVector } from "../../game/utils/get-direction";
 import { GameWorld } from "./game.world";
 import { exampleConfig } from "./configs/example.config";
+import PubSub from "pubsub-js";
+
 const state: {
   world: GameWorld | null;
 } = {
@@ -37,6 +39,15 @@ async function moveCharacter(name: string, directions: DirectionVector) {
   state.world?.moveCharacter(name, directions);
 }
 
+async function subscribe(
+  event: string,
+  callback: (eventName: string, data: any) => void
+) {
+  return PubSub.subscribe(event, callback);
+}
+async function unsubscribe(token: string) {
+  PubSub.unsubscribe(token);
+}
 const exports = {
   load,
   start,
@@ -44,6 +55,8 @@ const exports = {
   addCharacter,
   moveCharacter,
   removeCharacter,
+  subscribe,
+  unsubscribe,
 };
 export declare type MapWorker = typeof exports;
 

@@ -1,19 +1,9 @@
+import { BaseScene } from "../base-scene";
 
-export default class Title extends Phaser.Scene {
-
+export default class Title extends BaseScene {
   constructor() {
     super({
-      key: 'title'
+      key: "title",
     });
-  }
-  preload() {
-
-  }
-
-  create() {
-    console.log('Title Scene Loaded');
-  }
-  update(time: number, delta: number): void {
-    super.update(time, delta);
   }
 }

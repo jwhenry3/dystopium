@@ -1,15 +1,18 @@
-import { BehaviorSubject, Subject }     from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
+import { Character } from "../actors/character";
 import { SceneHook, SceneHookWithData } from "../interfaces/scene-hook";
 
 export class BaseScene extends Phaser.Scene {
-
   actors!: Phaser.GameObjects.Group;
+  characters: { [name: string]: Character } = {};
   hasPreloaded = false;
   hasCreated = false;
 
   onPreload = new BehaviorSubject<SceneHook<BaseScene> | null>(null);
   onCreate = new BehaviorSubject<SceneHook<BaseScene> | null>(null);
-  onUpdate = new Subject<SceneHookWithData<{ time: number, delta: number }, BaseScene>>();
+  onUpdate = new Subject<
+    SceneHookWithData<{ time: number; delta: number }, BaseScene>
+  >();
 
   preload() {
     this.onPreload.next({ scene: this });
