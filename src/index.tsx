@@ -19,9 +19,15 @@ reportWebVitals();
 
 startMap("example").then((map: MapWorker) => {
   map.addCharacter("test", 100, 100);
-  let dir = 1;
-  setInterval(() => {
-    map.moveCharacter("test", [1 * dir, 1 * dir]);
-    dir = dir * -1;
-  }, 2000);
+  // let dir = 1;
+  // let dir2 = 1;
+  // let tick = 0;
+  // setInterval(() => {
+  //   map.moveCharacter("test", [1 * dir, 1 * dir2]);
+  //   dir = dir * -1;
+  //   if (tick % 10 === 2) {
+  //     dir2 = dir2 * -1;
+  //   }
+  //   tick++;
+  // }, 2000);
 });

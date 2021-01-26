@@ -1,41 +1,48 @@
 import { expose } from "comlink";
-import "@geckos.io/phaser-on-nodejs";
-import "phaser";
 import { DirectionVector } from "../../game/utils/get-direction";
+import { ExampleWorld } from "./example/example.world";
+import { BaseWorld } from "./base.world";
 const state: {
-  game: null;
-  scene: null;
-  characters: { [name: string]: null };
+  world: BaseWorld | null;
 } = {
-  game: null,
-  scene: null,
-  characters: {},
+  world: null,
 };
 
 async function load(map: string) {
-  if (!state.game) {
+  if (!state.world) {
     console.log("loading", map);
     if (map === "example") {
+      state.world = new ExampleWorld();
+      state.world.start();
       return;
     }
   }
 }
 
+async function start() {
+  state.world?.start();
+}
+async function stop() {
+  state.world?.stop();
+}
+
 async function addCharacter(name: string, x: number, y: number) {
-  // if (state.game && state.scene) {
-  // state.characters[name] = new Character(state.scene, x, y);
-  // }
+  state.world?.addCharacter(name, x, y);
+}
+async function removeCharacter(name: string) {
+  state.world?.removeCharacter(name);
 }
 async function moveCharacter(name: string, directions: DirectionVector) {
-  // if (state.characters[name]) {
-  //   state.characters[name].directions = directions;
-  // }
+  state.world?.moveCharacter(name, directions);
 }
 
 const exports = {
   load,
+  start,
+  stop,
   addCharacter,
   moveCharacter,
+  removeCharacter,
 };
 export declare type MapWorker = typeof exports;
 
