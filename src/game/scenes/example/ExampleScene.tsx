@@ -49,9 +49,14 @@ const ExampleScene: FC = () => {
                 const body: Character = scene!.characters[name] as any;
                 if (update.position) {
                   const [x, y] = update.position;
-                  // there is a bug with position that reads NaN for some reason
-                  body.x = typeof x !== "undefined" ? x : body.x;
-                  body.y = typeof y !== "undefined" ? x : body.y;
+                  body.nextPosition[0] =
+                    typeof x !== "undefined" ? x : body.nextPosition[0];
+                  body.nextPosition[1] =
+                    typeof y !== "undefined" ? y : body.nextPosition[1];
+                  body.moveTo.moveTo(
+                    body.nextPosition[0],
+                    body.nextPosition[1]
+                  );
                 }
               }
             }

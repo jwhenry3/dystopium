@@ -1,12 +1,29 @@
 import { BaseScene } from "../scenes/base-scene";
 import { KeyMap } from "../interfaces/keys";
-import { getVelocity } from "../utils/get-velocity";
 import { DirectionVector } from "../utils/get-direction";
+// @ts-ignore
+import MoveTo from "phaser3-rex-plugins/plugins/moveto";
+import { rules } from "../stores/game/rules.store";
+
+export interface MoveToInstance {
+  moveTo(x: number, y: number): void;
+  setEnable(value: boolean): void;
+  enable: boolean;
+  pause(): void;
+  resume(): void;
+  stop(): void;
+  isRunning: boolean;
+}
 
 export class Character extends Phaser.GameObjects.Arc {
   keys: KeyMap = {};
   lastVel = { x: 0, y: 0 };
   directions: DirectionVector = [0, 0];
+  nextPosition: DirectionVector = [0, 0];
+  moveTo: MoveToInstance = new MoveTo(this, {
+    speed: 90 * rules.movementSpeed,
+    rotateToTarget: false,
+  });
 
   constructor(
     public scene: BaseScene,
@@ -26,19 +43,12 @@ export class Character extends Phaser.GameObjects.Arc {
       Phaser.Display.Color.GetColor(30, 100, 200),
       0.5
     );
+    this.nextPosition = [x, y];
     this.scene.actors.add(this, true);
-    this.scene.physics.add.existing(this);
     this.scene.characters[this.name] = this;
   }
 
   update(...args: any[]): void {
     super.update(...args);
-    const directions: DirectionVector = this.directions;
-    const { x, y } = getVelocity(...directions);
-    if (x !== this.lastVel.x || y !== this.lastVel.y) {
-      this.lastVel = { x, y };
-      (this.body as Phaser.Physics.Arcade.Body).setVelocity(x, y);
-      console.log("moving character", this.name, this.lastVel);
-    }
   }
 }

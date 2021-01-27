@@ -20,12 +20,6 @@ function getConfig(canvas: HTMLCanvasElement): Phaser.Types.Core.GameConfig {
     scale: {
       mode: Phaser.Scale.RESIZE,
     },
-    physics: {
-      default: "arcade",
-      arcade: {
-        fps: 30,
-      },
-    },
   } as Phaser.Types.Core.GameConfig;
 }
 

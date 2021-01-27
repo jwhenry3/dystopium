@@ -1,12 +1,12 @@
-import create, {State} from "zustand";
+import create, { State } from "zustand";
 
 export interface GameRules extends State {
-  movementSpeed: number
+  movementSpeed: number;
 }
 
 // Preload from file or server
-const config: GameRules = {
-  movementSpeed: 1
+export const rules: GameRules = {
+  movementSpeed: 2,
 };
 
-export const useGameRules = create<GameRules>((): GameRules => config);
+export const useGameRules = create<GameRules>((): GameRules => rules);

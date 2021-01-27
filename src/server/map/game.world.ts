@@ -2,9 +2,9 @@ import { World, WorldOptions } from "p2";
 import { DirectionVector } from "../../game/utils/get-direction";
 import { loadMapConfig, MapConfig } from "./loader";
 import { throttle } from "lodash";
-import { difference } from "../util";
 import PubSub from "pubsub-js";
 import { Movable } from "./movable";
+import { rules } from "../../game/stores/game/rules.store";
 
 export class GameWorld extends World {
   protected fixedTimeStep = 1 / 30;
@@ -38,8 +38,8 @@ export class GameWorld extends World {
   moveCharacter(name: string, [x, y]: DirectionVector) {
     if (this.characters[name]) {
       this.characters[name].fixedVelocity = [
-        Math.floor(x * 4),
-        Math.floor(y * 4),
+        Math.floor(x * 4 * rules.movementSpeed),
+        Math.floor(y * 4 * rules.movementSpeed),
       ];
     }
   }
@@ -61,13 +61,14 @@ export class GameWorld extends World {
           this.characters[key].position[1],
         ],
       };
-      const change = difference(
-        acc[key],
-        (this.lastState[key as string] as any) || {}
-      );
-      if (JSON.stringify(change) !== "{}") {
+      const old = this.lastState[key as string];
+      if (
+        !old ||
+        old.position[0] !== acc[key].position[0] ||
+        old.position[1] !== acc[key].position[1]
+      ) {
         hasDiff = true;
-        diff[key] = change;
+        diff[key] = acc[key];
       }
       return acc;
     }, {} as any);
@@ -75,17 +76,13 @@ export class GameWorld extends World {
       PubSub.publish("map:update", diff);
       this.lastState = state;
     }
-  }, 200);
+  }, 100);
   animate = (time: number) => {
     if (this.running) {
       requestAnimationFrame(this.animate);
       const deltaTime = this.lastTime ? time - this.lastTime : 0;
       this.step(this.fixedTimeStep, deltaTime, this.maxSubSteps);
       for (let key of Object.keys(this.characters)) {
-        console.log(
-          this.characters[key].velocity,
-          this.characters[key].fixedVelocity
-        );
         this.characters[key].velocity = [
           this.characters[key].fixedVelocity[0],
           this.characters[key].fixedVelocity[1],
