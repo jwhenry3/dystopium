@@ -2,7 +2,7 @@ import { World, WorldOptions } from "p2";
 import { DirectionVector } from "../../game/utils/get-direction";
 import { loadMapConfig, MapConfig } from "./loader";
 import { throttle } from "lodash";
-import PubSub from "pubsub-js";
+import { publish } from "pubsub-js";
 import { Movable } from "./movable";
 import { rules } from "../../game/stores/game/rules.store";
 
@@ -73,7 +73,7 @@ export class GameWorld extends World {
       return acc;
     }, {} as any);
     if (hasDiff) {
-      PubSub.publish("map:update", diff);
+      publish("map:update:broadcast", diff);
       this.lastState = state;
     }
   }, 100);
@@ -82,12 +82,7 @@ export class GameWorld extends World {
       requestAnimationFrame(this.animate);
       const deltaTime = this.lastTime ? time - this.lastTime : 0;
       this.step(this.fixedTimeStep, deltaTime, this.maxSubSteps);
-      for (let key of Object.keys(this.characters)) {
-        this.characters[key].velocity = [
-          this.characters[key].fixedVelocity[0],
-          this.characters[key].fixedVelocity[1],
-        ] as [number, number];
-      }
+      publish("map:update", { time, deltaTime });
       setTimeout(() => this.update(time));
       this.lastTime = time;
     }

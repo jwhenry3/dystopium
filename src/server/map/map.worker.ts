@@ -45,6 +45,7 @@ async function subscribe(
 ) {
   return PubSub.subscribe(event, callback);
 }
+
 async function unsubscribe(token: string) {
   PubSub.unsubscribe(token);
 }

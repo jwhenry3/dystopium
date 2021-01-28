@@ -51,4 +51,9 @@ export class Character extends Phaser.GameObjects.Arc {
   update(...args: any[]): void {
     super.update(...args);
   }
+  setNextPosition(x: number, y: number) {
+    this.nextPosition[0] = typeof x !== "undefined" ? x : this.nextPosition[0];
+    this.nextPosition[1] = typeof y !== "undefined" ? y : this.nextPosition[1];
+    this.moveTo.moveTo(this.nextPosition[0], this.nextPosition[1]);
+  }
 }

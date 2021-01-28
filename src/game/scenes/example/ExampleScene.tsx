@@ -11,8 +11,15 @@ import { Button } from "@material-ui/core";
 import CharacterComponent from "../../actors/CharacterComponent";
 import { useWorld } from "../../stores/game/maps.store";
 import { proxy } from "comlink";
-import { Character } from "../../actors/character";
+import { BaseScene } from "../base-scene";
 
+const updateCharacter = (scene: BaseScene, name: string, update: any) => {
+  if (update.position) {
+    scene.characters[name]?.setNextPosition(
+      ...(update.position as [number, number])
+    );
+  }
+};
 const ExampleScene: FC = () => {
   const { changeServer, changeType } = useServers(getServerActions);
   const changeCharacter = useCharacters(getChangeCharacter);
@@ -32,7 +39,7 @@ const ExampleScene: FC = () => {
     let token = "";
     world.mapWorker
       .subscribe(
-        "map:update",
+        "map:update:broadcast",
         proxy(
           (
             event,
@@ -43,23 +50,9 @@ const ExampleScene: FC = () => {
               };
             }
           ) => {
-            for (let name of Object.keys(data)) {
-              const update = data[name];
-              if (scene?.characters[name]) {
-                const body: Character = scene!.characters[name] as any;
-                if (update.position) {
-                  const [x, y] = update.position;
-                  body.nextPosition[0] =
-                    typeof x !== "undefined" ? x : body.nextPosition[0];
-                  body.nextPosition[1] =
-                    typeof y !== "undefined" ? y : body.nextPosition[1];
-                  body.moveTo.moveTo(
-                    body.nextPosition[0],
-                    body.nextPosition[1]
-                  );
-                }
-              }
-            }
+            Object.keys(data).map(async (name) => {
+              updateCharacter(scene!, name, data[name]);
+            });
           }
         )
       )
