@@ -1,4 +1,4 @@
-import { GameRules } from "../rules";
+import { GameRules } from "../game/rules";
 
 const singleSpeed = GameRules.speed;
 const diagonalSpeed = singleSpeed / 1.41;
@@ -10,6 +10,6 @@ export function getVelocity(x: number, y: number) {
   }
   return {
     x: x * speed,
-    y: y * speed
+    y: y * speed,
   };
 }

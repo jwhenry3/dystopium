@@ -1,6 +1,6 @@
 import { BaseScene } from "../scenes/base-scene";
 import { KeyMap } from "../interfaces/keys";
-import { DirectionVector } from "../utils/get-direction";
+import { DirectionVector } from "../../shared/directions";
 // @ts-ignore
 import MoveTo from "phaser3-rex-plugins/plugins/moveto";
 import { rules } from "../stores/game/rules.store";

@@ -1,8 +1,9 @@
-import { expose } from "comlink";
-import { DirectionVector } from "../../game/utils/get-direction";
-import { GameWorld } from "./game.world";
-import { exampleConfig } from "./configs/example.config";
-import PubSub from "pubsub-js";
+import { expose } from 'threads/worker';
+import { DirectionVector } from './src/utils/directions';
+import { GameWorld } from './src/physics/game.world';
+import { exampleConfig } from './src/physics/maps/example.config';
+import PubSub from 'pubsub-js';
+import { Observable } from 'observable-fns';
 
 const state: {
   world: GameWorld | null;
@@ -12,12 +13,12 @@ const state: {
 
 async function load(map: string) {
   if (!state.world) {
-    console.log("loading", map);
-    if (map === "example") {
+    console.log('loading', map);
+    if (map === 'example') {
       state.world = new GameWorld(exampleConfig.name, exampleConfig);
     }
   }
-  console.log("starting", map);
+  console.log('starting', map);
   state.world?.clear();
   state.world?.start();
 }
@@ -39,17 +40,17 @@ async function moveCharacter(name: string, directions: DirectionVector) {
   state.world?.moveCharacter(name, directions);
 }
 
-async function subscribe(
-  event: string,
-  callback: (eventName: string, data: any) => void
-) {
-  return PubSub.subscribe(event, callback);
+const observables: { [event: string]: Observable<any> } = {};
+
+function subscribe(event: string) {
+  if (!observables[event])
+    observables[event] = new Observable(observer => {
+      PubSub.subscribe(event, (event, data) => observer.next(data));
+    });
+  return observables[event];
 }
 
-async function unsubscribe(token: string) {
-  PubSub.unsubscribe(token);
-}
-const exports = {
+const api = {
   load,
   start,
   stop,
@@ -57,8 +58,7 @@ const exports = {
   moveCharacter,
   removeCharacter,
   subscribe,
-  unsubscribe,
 };
-export declare type MapWorker = typeof exports;
+export declare type MapWorker = typeof api;
 
-expose(exports);
+expose(api);

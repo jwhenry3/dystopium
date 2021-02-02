@@ -9,9 +9,9 @@ import { getServerActions, useServers } from "../../stores/lobby/servers.store";
 import { getChangeAccount, useAccount } from "../../stores/lobby/account.store";
 import { Button } from "@material-ui/core";
 import CharacterComponent from "../../actors/CharacterComponent";
-import { useWorld } from "../../stores/game/maps.store";
 import { proxy } from "comlink";
 import { BaseScene } from "../base-scene";
+import { off, on } from "../../../connection";
 
 const updateCharacter = (scene: BaseScene, name: string, update: any) => {
   if (update.position) {
@@ -25,7 +25,6 @@ const ExampleScene: FC = () => {
   const changeCharacter = useCharacters(getChangeCharacter);
   const changeAccount = useAccount(getChangeAccount);
 
-  const world = useWorld("example");
   const factory = useCallback(() => new Example(), []);
   const { scene, changeScene } = useSceneLifecycle("example", factory);
   const onBackToTitle = useCallback(() => {
@@ -35,34 +34,27 @@ const ExampleScene: FC = () => {
     changeType(null);
     changeScene("title");
   }, [changeAccount, changeCharacter, changeServer, changeType, changeScene]);
-  useEffect(() => {
-    let token = "";
-    world.mapWorker
-      .subscribe(
-        "map:update:broadcast",
-        proxy(
-          (
-            event,
-            data: {
-              [key: string]: {
-                position?: [number, number];
-                velocity?: [number, number];
-              };
-            }
-          ) => {
-            Object.keys(data).map(async (name) => {
-              updateCharacter(scene!, name, data[name]);
-            });
-          }
-        )
-      )
-      .then((_token) => {
-        token = _token;
+
+  const onUpdate = useCallback(
+    (data: {
+      [key: string]: {
+        position?: [number, number];
+        velocity?: [number, number];
+      };
+    }) => {
+      Object.keys(data).map(async (name) => {
+        updateCharacter(scene!, name, data[name]);
       });
+    },
+    [scene]
+  );
+  useEffect(() => {
+    on("example:map:update", onUpdate);
     return () => {
-      world.mapWorker.unsubscribe(token);
+      off("example:map:update", onUpdate);
+      scene?.destroy();
     };
-  }, [world, scene]);
+  }, [scene]);
   return (
     <div className="scene example">
       <div>Example Works!</div>

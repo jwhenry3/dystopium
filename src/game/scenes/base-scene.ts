@@ -30,4 +30,5 @@ export class BaseScene extends Phaser.Scene {
     super.update(time, delta);
     this.onUpdate.next({ scene: this, data: { time, delta } });
   }
+  destroy() {}
 }

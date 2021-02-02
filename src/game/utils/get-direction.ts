@@ -1,6 +1,5 @@
 import { KeyMap } from "../interfaces/keys";
-
-export declare type DirectionVector = [number, number];
+import { DirectionVector } from "../../shared/directions";
 
 export function getDirection(keys: KeyMap): DirectionVector {
   const directions = { x: 0, y: 0 };

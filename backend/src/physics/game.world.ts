@@ -1,10 +1,10 @@
-import { World, WorldOptions } from "p2";
-import { DirectionVector } from "../../game/utils/get-direction";
-import { loadMapConfig, MapConfig } from "./loader";
-import { throttle } from "lodash";
-import { publish } from "pubsub-js";
-import { Movable } from "./movable";
-import { rules } from "../../game/stores/game/rules.store";
+import { World, WorldOptions } from 'p2';
+import { loadMapConfig, MapConfig } from './loader';
+import { throttle } from 'lodash';
+import { publish } from 'pubsub-js';
+import { Movable } from './movable';
+import { rules } from '../game-rules';
+import { DirectionVector } from '../utils/directions';
 
 export class GameWorld extends World {
   protected fixedTimeStep = 1 / 30;
@@ -17,7 +17,7 @@ export class GameWorld extends World {
   constructor(
     public name: string,
     mapConfig: MapConfig,
-    worldOptions?: WorldOptions
+    worldOptions?: WorldOptions,
   ) {
     super({
       gravity: [0, 0],
@@ -51,7 +51,7 @@ export class GameWorld extends World {
     }
   }
   protected lastState: { [key: string]: any } = {};
-  update = throttle((time) => {
+  update = throttle(time => {
     const diff: any = {};
     let hasDiff = false;
     const state = Object.keys(this.characters).reduce((acc, key) => {
@@ -73,16 +73,16 @@ export class GameWorld extends World {
       return acc;
     }, {} as any);
     if (hasDiff) {
-      publish("map:update:broadcast", diff);
+      publish('map:update:broadcast', diff);
       this.lastState = state;
     }
   }, 100);
   animate = (time: number) => {
     if (this.running) {
-      requestAnimationFrame(this.animate);
+      this.requestAnimationFrame(this.animate);
       const deltaTime = this.lastTime ? time - this.lastTime : 0;
       this.step(this.fixedTimeStep, deltaTime, this.maxSubSteps);
-      publish("map:update", { time, deltaTime });
+      publish('map:update', { time, deltaTime });
       setTimeout(() => this.update(time));
       this.lastTime = time;
     }
@@ -91,7 +91,7 @@ export class GameWorld extends World {
   start() {
     if (!this.running) {
       this.running = true;
-      requestAnimationFrame(this.animate);
+      this.requestAnimationFrame(this.animate);
     }
   }
   async clear() {
@@ -102,5 +102,8 @@ export class GameWorld extends World {
 
   stop() {
     this.running = false;
+  }
+  requestAnimationFrame(f: (time: number) => void) {
+    setImmediate(() => f(Date.now()));
   }
 }
