@@ -6,7 +6,7 @@ export function connect() {
   if (connection?.connected) {
     connection.disconnect();
   }
-  connection = io("ws://localhost:3001");
+  connection = io("ws://localhost:3001", { transports: ["websocket"] });
 }
 
 export function addCharacter(map: string, name: string, x: number, y: number) {

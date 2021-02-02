@@ -16,7 +16,7 @@ export interface WorldMap {
 export interface PlayerMap {
   [playerName: string]: string;
 }
-@WebSocketGateway()
+@WebSocketGateway(3001)
 export class MapGateway implements OnGatewayInit {
   @WebSocketServer()
   server: Namespace;
@@ -35,25 +35,26 @@ export class MapGateway implements OnGatewayInit {
   async afterInit(server: any) {
     this.maps = await this.loadMaps();
     for (let key in this.maps) {
-      this.maps[key]!.subscribe('map:update').subscribe(data => {
+      this.maps[key]!.subscribe('map:update:broadcast').subscribe(data => {
+        console.log(data);
         this.server.emit(key + ':map:update', data);
       });
     }
   }
 
-  @SubscribeMessage('character:add')
+  @SubscribeMessage('map:character:add')
   async addCharacter(map: string, name: string, x: number, y: number) {
     this.players[name] = map;
     await this.maps[map]?.addCharacter(name, x, y);
     this.server.emit(map + ':player:join', { name });
   }
-  @SubscribeMessage('character:remove')
+  @SubscribeMessage('map:character:remove')
   async removeCharacter(name: string) {
     await this.maps[this.players[name]]?.removeCharacter(name);
     this.server.emit(this.players[name] + ':player:leave', { name });
     delete this.players[name];
   }
-  @SubscribeMessage('character:move')
+  @SubscribeMessage('map:character:move')
   async move(name: string, directions: DirectionVector) {
     await this.maps[this.players[name]]?.moveCharacter(name, directions);
   }
